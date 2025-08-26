@@ -1,0 +1,7 @@
+.venv/*
+instance/*
+.idea/*
+__pycache__/*
+
+# Doit absolument être dans le git ignore sur un vrais projet !!!
+# .env.local
