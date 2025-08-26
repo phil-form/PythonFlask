@@ -1,4 +1,5 @@
 import os
+import wtforms_json
 from pathlib import Path
 from flask import Flask
 from flask_cors import CORS
@@ -21,6 +22,7 @@ app = Flask("app")
 app.debug = os.environ.get('DEBUG', False)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
+wtforms_json.init()
 
 # initialise ma DB, il va récupérer la chaine de connection
 # dans app.config
