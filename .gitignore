@@ -5,3 +5,6 @@ __pycache__/*
 
 # Doit absolument être dans le git ignore sur un vrais projet !!!
 # .env.local
+.DS_Store
+
+.vscode/
