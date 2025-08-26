@@ -8,10 +8,7 @@ from app.services.user_service import UserService
 @app.get('/users')
 def get_users():
     user_service = UserService()
-    return jsonify([{
-            'username': u.username,
-            'password': u.password
-        } for u in user_service.find_all()])
+    return jsonify([u.serialize() for u in user_service.find_all()])
 
 @app.post('/users')
 def post_user():
@@ -21,6 +18,6 @@ def post_user():
     if form.validate():
         user = user_service.insert(form)
         
-        return jsonify(user)
+        return jsonify(user.serialize())
     
     return jsonify(form.errors)

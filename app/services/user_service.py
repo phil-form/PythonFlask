@@ -1,14 +1,16 @@
 from app import db
+from app.dtos.user_dto import UserDTO
 from app.forms.users.user_register_form import UserRegisterForm
 from app.models.user import User
 
 
 class UserService:
     def find_all(self):
-        return User.query.all()
+        return [UserDTO(u) for u in User.query.all()]
 
     def find_one(self, id):
-        return User.query.filter_by(userid=id).first()
+        user = User.query.filter_by(userid=id).first()
+        return UserDTO(user) if user else None
 
     def insert(self, form: UserRegisterForm):
         user = User(
@@ -17,13 +19,13 @@ class UserService:
         )
         db.session.add(user)
         db.session.commit()
-        return user
+        return UserDTO(user)
 
     def update(self, user: User):
         db.session.commit()
-        return user
+        return UserDTO(user)
 
     def delete(self, user: User):
         db.session.delete(user)
         db.session.commit()
-        return user
+        return UserDTO(user)
