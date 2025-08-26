@@ -1,6 +1,7 @@
 from app import db
 from app.dtos.user_dto import UserDTO
 from app.forms.users.user_register_form import UserRegisterForm
+from app.forms.users.user_update_form import UserUpdateForm
 from app.models.user import User
 
 
@@ -21,7 +22,15 @@ class UserService:
         db.session.commit()
         return UserDTO(user)
 
-    def update(self, user: User):
+    def update(self, id, form: UserUpdateForm):
+        user = User.query.filter_by(userid=id).first()
+        
+        user.lastname = form.lastname.data
+        user.firstname = form.firstname.data
+
+        if form.password.data:
+            user.password = form.password.data
+
         db.session.commit()
         return UserDTO(user)
 
