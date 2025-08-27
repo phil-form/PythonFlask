@@ -72,6 +72,10 @@ flask db init
 
 générer une migration
 ```bash
+flask db migrate -m "nom de la migration"
+
+OU 
+
 flask db revision --autogenerate -m "nom de la migration"
 ```
 
