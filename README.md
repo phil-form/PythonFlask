@@ -288,9 +288,13 @@ flask db upgrade
 ```python
 class UserService:
     def find_all(self):
+        # User.query.all() -> permet de récupérer toutes les données en DB
         return [UserDTO(u) for u in User.query.all()]
 
     def find_one(self, id):
+        # User.query.filter_by(champ_de_l_objet=valeur) -> permet de récupérer les entités
+        # respectant une certaine valeur de champ
+        # le .first() permet de récupérer seulement le première élément
         user = User.query.filter_by(userid=id).first()
         return UserDTO(user) if user else None
 
@@ -299,7 +303,9 @@ class UserService:
             username=form.username.data,
             password=form.password.data
         )
+        # db.session.add(entité) -> permet d'ajouter une entité en DB via la transaction en cours
         db.session.add(user)
+        # db.session.commit() -> confirme les modification et applique la transaction en DB
         db.session.commit()
         return UserDTO(user)
 
@@ -312,11 +318,15 @@ class UserService:
         if form.password.data:
             user.password = form.password.data
 
+        # db.session.commit() -> confirme les modification et applique la transaction en DB
         db.session.commit()
         return UserDTO(user)
 
     def delete(self, user: User):
+        # db.session -> créé une transaction
+        # db.session.delete(entité) -> supprimera l'entité
         db.session.delete(user)
+        # db.session.commit() -> confirme les modification et applique la transaction en DB
         db.session.commit()
         return UserDTO(user)
 ```
