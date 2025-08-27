@@ -36,7 +36,7 @@ def put_product(id):
     if form.validate():
         dto = product_service.update(id, form)
 
-        return jsonify(dto.serialize())
+        return jsonify(dto.serialize()) if dto else None
 
     return jsonify(form.errors)
 
@@ -44,4 +44,4 @@ def put_product(id):
 def delete_product(id):
     product_service = ProductService()
     dto = product_service.delete(id)
-    return jsonify(dto.serialize())
+    return jsonify(dto.serialize()) if dto else None

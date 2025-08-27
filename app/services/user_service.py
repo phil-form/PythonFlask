@@ -24,6 +24,8 @@ class UserService:
 
     def update(self, id, form: UserUpdateForm):
         user = User.query.filter_by(userid=id).first()
+        if not user:
+            return None
         
         user.lastname = form.lastname.data
         user.firstname = form.firstname.data

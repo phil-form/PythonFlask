@@ -36,9 +36,9 @@ def put_user(userid: int):
     form = UserUpdateForm.from_json(request.json)
     
     if form.validate():
-        user = user_service.update(userid, form)
+        dto = user_service.update(userid, form)
 
-        return jsonify(user.serialize())
+        return jsonify(dto.serialize()) if dto else None
     
     return jsonify(form.errors)
 
