@@ -94,6 +94,24 @@ def delete_user(userid: int):
     return ('', 404)
 ```
 
+### Codes de retour de l’API
+
+L’API renvoie un code standard dans chaque réponse pour indiquer l’état du traitement :
+
+| Code | Signification                | Description                                                                 |
+|------|------------------------------|-----------------------------------------------------------------------------|
+| 200  | OK                           | La requête a été traitée avec succès.                                       |
+| 201  | Created                      | Une nouvelle ressource a été créée.                                         |
+| 400  | Bad Request                  | La requête est invalide ou contient des paramètres incorrects.              |
+| 401  | Unauthorized                 | Authentification requise ou jeton invalide.                                 |
+| 403  | Forbidden                    | L’accès à la ressource demandée est refusé.                                |
+| 404  | Not Found                    | La ressource demandée n’existe pas.                                         |
+| 409  | Conflict                     | Conflit avec l’état actuel de la ressource (ex. doublon).                   |
+| 422  | Unprocessable Entity         | Données valides mais impossibles à traiter.                                 |
+| 500  | Internal Server Error        | Une erreur interne est survenue sur le serveur.                             |
+| 503  | Service Unavailable          | Le service est temporairement indisponible (ex. maintenance).               |
+
+
 ## models
 
 Les modès sont créé via SQLAlchemy et les migrations sont gérée par Alembic
@@ -249,8 +267,46 @@ class BasketItem(Base):
     item = relationship('Item', back_populates='basket_items')
 ```
 
-
 ### SQLALCHEMY/Alembic
+
+Utilisation de SqlAlchemy pour les select : 
+```python
+# 1. Récupérer tous les enregistrements
+    users = User.query.all()
+    print("Tous les utilisateurs:", users)
+
+    # 2. Filtrer (WHERE)
+    alice = User.query.filter_by(username="alice").first()
+    print("Utilisateur Alice:", alice)
+
+    # 3. Filtre plus complexe
+    emails = User.query.filter(User.email.like("%@example.com")).all()
+    print("Tous les emails @example.com:", emails)
+
+    # 4. ORDER BY
+    ordered_users = User.query.order_by(User.username.desc()).all()
+    print("Utilisateurs triés:", ordered_users)
+
+    # 5. LIMIT
+    first_two = User.query.limit(2).all()
+    print("Deux premiers:", first_two)
+
+    # 6. OFFSET + LIMIT (Pagination)
+    second_page = User.query.offset(2).limit(2).all()
+    print("Page 2:", second_page)
+
+    # 7. COUNT
+    count = User.query.count()
+    print("Nombre total d’utilisateurs:", count)
+
+    # 8. Projection (sélection de colonnes spécifiques)
+    usernames = db.session.query(User.username).all()
+    print("Liste des usernames:", usernames)
+
+    # 9. Filtre In
+    users = User.query.filter(User.username.in_(['alice', 'test'])).all()
+    print("Liste des utilisateurs:", emails)
+```
 
 initialiser la DB
 ```bash
