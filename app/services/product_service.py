@@ -7,7 +7,7 @@ from app.services.base_service import BaseService
 
 class ProductService(BaseService):
     def find_all(self):
-        return [ProductDTO(p) for p in Product.query.all()]
+        return [ProductDTO(p) for p in Product.query.filter_by(active=True)]
 
     def find_one(self, id):
         return ProductDTO(Product.query.filter_by(id=id))
@@ -43,6 +43,6 @@ class ProductService(BaseService):
         if not product:
             return None
 
-        db.session.delete(product)
+        product.active = False
         db.session.commit()
         return ProductDTO(product)

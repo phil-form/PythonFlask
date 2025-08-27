@@ -45,8 +45,5 @@ def put_user(userid: int):
 @app.delete('/users/<int:userid>')
 def delete_user(userid: int):
     user_service = UserService()
-    user = user_service.find_one(userid)
-    if user:
-        user_service.delete(user)
-        return ('', 204)
-    return ('', 404)
+    dto = user_service.delete(userid)
+    return jsonify(dto.serialize()) if dto else None

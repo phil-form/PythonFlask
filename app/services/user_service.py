@@ -1,4 +1,5 @@
 from app import db
+from flask import request
 from app.dtos.user_dto import UserDTO
 from app.forms.users.user_register_form import UserRegisterForm
 from app.forms.users.user_update_form import UserUpdateForm
@@ -7,7 +8,10 @@ from app.models.user import User
 
 class UserService:
     def find_all(self):
-        return [UserDTO(u) for u in User.query.all()]
+        if len(request.args) >= 1 and request.args.get('all') == 'true':
+            return [UserDTO(u) for u in User.query.all()]
+
+        return [UserDTO(u) for u in User.query.filter_by(active=True).all()]
 
     def find_one(self, id):
         user = User.query.filter_by(userid=id).first()
@@ -36,7 +40,8 @@ class UserService:
         db.session.commit()
         return UserDTO(user)
 
-    def delete(self, user: User):
-        db.session.delete(user)
+    def delete(self, id):
+        user = User.query.filter_by(userid=id).first()
+        user.active = False
         db.session.commit()
         return UserDTO(user)
