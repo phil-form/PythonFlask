@@ -13,18 +13,63 @@ Toujours faire une migration
 -> flask db upgrade
 ```
 
-## FROM DTO MODELE
+## MODELS, FROMS & DTOS
 ### Modèles
 
 Les modèles sont uniquement utilisé pour communiqué avec la DB et modifier les informations de la DB.
+
+```python
+from app import db
+
+class User(db.Model):
+    __tablename__ = 'users'
+    
+    userid = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    lastname = db.Column(db.String(255), nullable=True)
+    firstname = db.Column(db.String(255), nullable=True)
+```
 
 ### FORMS
 
 Vont récupérer les données envoyées par l'utilisateur au travers des body de la requête. Et les forms vont aussi faire la validation de ces données, donc vérifier que les contraintes d'intégrité sont bien respectées.
 
+```python
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+
+class UserRegisterForm(FlaskForm):
+    class Meta:
+        csrf = False
+    username = StringField('username', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()])
+
+```
 ### DTOS
 
 Les DTOs sont les objets qui contiendront les données envoyée à l'utilisateur. Ceux-ci peuvent être utilisé entre autre pour filtrer des données ne devant pas être renvoyée (example le password de l'utilisateur). Ils peuvent contenir des données supplémentaires (example le nom complèt d'une personne)
+
+```python
+from copy import deepcopy
+from app.models.user import User
+
+
+class UserDTO:
+    def __init__(self, user: User):
+        self.id = user.userid
+        self.username = user.username
+        self.firstname = user.firstname
+        self.lastname = user.lastname
+        self.fullname = f"{user.firstname} {user.lastname}" if user.firstname and user.lastname else None
+
+    def serialize(self):
+        dto = deepcopy(self)
+        
+        return dto.__dict__
+
+```
 
 ## controllers
 
