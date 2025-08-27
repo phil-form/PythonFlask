@@ -1,8 +1,10 @@
 from copy import deepcopy
+
+from app.dtos.abstract_dto import AbstractDTO
 from app.models.user import User
 
 
-class UserDTO:
+class UserDTO(AbstractDTO):
     def __init__(self, user: User):
         self.id = user.userid
         self.username = user.username
