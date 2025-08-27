@@ -118,21 +118,7 @@ Les modès sont créé via SQLAlchemy et les migrations sont gérée par Alembic
 
 Après avoir modifier ou créé une entité il faut absolument générer une migration et l'exécuter!
 
-### 1) Créer la classe de Base
-
-=> Fichier Models/Base.py
-
-Ici on doit créer une classe de base pour nos entités, qui nous servira pour créer
-de nouvelles classes dérivée qui pourront être liées à une DB.
-
-```python
-from sqlalchemy.orm import DeclarativeBase
-
-class Base(DeclarativeBase):
-    pass
-```
-
-### 2) Créer vos entités : 
+### Créer vos entités : 
 
 => Fichiers Models/user.py Models/Basket.py
 
@@ -144,9 +130,11 @@ __tablename__ => nom de la table
 pour les champs : 
 nomDuChamp: Mapped[TYPE] = mapped_column(?contraintes?)
 
+Exemple : 
+
 id: Mapped[int] = mapped_column(primary_key=True)
 
-Crée un champ username d'une longueur max de 50 et avec le flag unique
+Exemple créer un champ username d'une longueur max de 50 et avec le flag unique :
 
 username: Mapped[String] = mapped_column(String(50), unique=True)
 ```python
@@ -160,33 +148,6 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
-```
-
-### 3) créer l'engine et manipuler nos entités 
-
-=> Fichier engine.py
-
-Dans celui-ci je vais devoir créer l'engine de la DB via la fonction create_engine, 
-attention que la DB doit être créée au préalable
-
-```python
-from sqlalchemy import create_engine
-
-# url = connection string
-# echo = afficher les informations de transaction avec la DB dans le terminal
-engine = create_engine(url='sqlite:///myfile.db', echo=True)
-```
-Créer les tables 
-```python
-from Models.Base import Base
-
-Base.metadata.create_all(engine)
-```
-Drop les tables
-```python
-from Models.Base import Base
-
-Base.metadata.drop_all(engine)
 ```
 
 ### One to many
@@ -272,40 +233,40 @@ class BasketItem(Base):
 Utilisation de SqlAlchemy pour les select : 
 ```python
 # 1. Récupérer tous les enregistrements
-    users = User.query.all()
-    print("Tous les utilisateurs:", users)
+users = User.query.all()
+print("Tous les utilisateurs:", users)
 
-    # 2. Filtrer (WHERE)
-    alice = User.query.filter_by(username="alice").first()
-    print("Utilisateur Alice:", alice)
+# 2. Filtrer (WHERE)
+alice = User.query.filter_by(username="alice").first()
+print("Utilisateur Alice:", alice)
 
-    # 3. Filtre plus complexe
-    emails = User.query.filter(User.email.like("%@example.com")).all()
-    print("Tous les emails @example.com:", emails)
+# 3. Filtre plus complexe
+emails = User.query.filter(User.email.like("%@example.com")).all()
+print("Tous les emails @example.com:", emails)
 
-    # 4. ORDER BY
-    ordered_users = User.query.order_by(User.username.desc()).all()
-    print("Utilisateurs triés:", ordered_users)
+# 4. ORDER BY
+ordered_users = User.query.order_by(User.username.desc()).all()
+print("Utilisateurs triés:", ordered_users)
 
-    # 5. LIMIT
-    first_two = User.query.limit(2).all()
-    print("Deux premiers:", first_two)
+# 5. LIMIT
+first_two = User.query.limit(2).all()
+print("Deux premiers:", first_two)
 
-    # 6. OFFSET + LIMIT (Pagination)
-    second_page = User.query.offset(2).limit(2).all()
-    print("Page 2:", second_page)
+# 6. OFFSET + LIMIT (Pagination)
+second_page = User.query.offset(2).limit(2).all()
+print("Page 2:", second_page)
 
-    # 7. COUNT
-    count = User.query.count()
-    print("Nombre total d’utilisateurs:", count)
+# 7. COUNT
+count = User.query.count()
+print("Nombre total d’utilisateurs:", count)
 
-    # 8. Projection (sélection de colonnes spécifiques)
-    usernames = db.session.query(User.username).all()
-    print("Liste des usernames:", usernames)
+# 8. Projection (sélection de colonnes spécifiques)
+usernames = db.session.query(User.username).all()
+print("Liste des usernames:", usernames)
 
-    # 9. Filtre In
-    users = User.query.filter(User.username.in_(['alice', 'test'])).all()
-    print("Liste des utilisateurs:", emails)
+# 9. Filtre In
+users = User.query.filter(User.username.in_(['alice', 'test'])).all()
+print("Liste des utilisateurs:", emails)
 ```
 
 initialiser la DB
