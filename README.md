@@ -171,58 +171,6 @@ from Models.Base import Base
 Base.metadata.drop_all(engine)
 ```
 
-## Ajouter des informations en DB :
-
-Pour ce faire on utiliser une sesssion, pour passer automatiquement par des transactions
-```python
-from sqlalchemy.orm import Session
-from Models.user import User
-
-with Session(engine) as session:
-    # Créer les nouveau utilisateurs
-    # Sans le session.add(user), l'utilisateur ne sera pas ajouté
-    user1 = User(username="user1", password="<PASSWORD>")
-    user2 = User(username="user2", password="<PASSWORD>")
-
-    # Ajouter un utilisateur dans DB
-    # session.add(user1)
-    # session.add(user2)
-
-    # ajoute plusieurs éléments en DB
-    session.add_all([user1, user2])
-    # Commit la transaction
-    session.commit()
-```
-
-#### Récupérer et manipuler des informations en DB
-```python
-with Session(engine) as session:
-    # Me permet de sélectionner des éléments en DB
-    stmt = select(User).where(User.username.in_(['user1', 'user2']))
-    # récuperer plusieurs entités en DB
-    users = session.scalars(stmt)
-    for user in users:
-        print(user.username)
-
-    stmt = select(User).where(User.username == 'user1')
-    # Récupérer une entité en DB
-    user = session.scalars(stmt).one()
-    print(user.username)
-
-    # dès que je modifie mon entité, l'ORM va détecter automatiquement
-    # que celle-ci a été modifiée, et la mettra à jour lors du prochain commit.
-    user.username = 'nouveau'
-    session.commit()
-
-    # Permet de supprimer une entité en DB
-    session.delete(user)
-    session.commit()
-
-    user1 = User(username="user1", password="<PASSWORD>")
-    session.add(user1)
-    session.commit()
-```
-
 ### One to many
 ```python
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
@@ -269,10 +217,12 @@ user_roles = Table('user_roles', Base.metadata,
 
 Faire les relations dans les entités respectives.
 
+Dans l'entité User
 ```python
     roles = relationship('Role', back_populates='users', secondary='user_roles')
 ```
 
+Dans l'entité Role
 ```python
     users = relationship('User', back_populates='roles', secondary='user_roles')
 ```
