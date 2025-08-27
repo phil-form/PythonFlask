@@ -10,3 +10,5 @@ class User(db.Model, BaseEntity):
     password = db.Column(db.String(255), nullable=False)
     lastname = db.Column(db.String(255), nullable=True)
     firstname = db.Column(db.String(255), nullable=True)
+
+    basket_items = db.relationship('BasketItem', back_populates='user')
