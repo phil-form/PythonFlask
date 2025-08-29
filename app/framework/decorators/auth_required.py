@@ -37,7 +37,7 @@ def auth_required(level="USER", or_is_current_user=False, **auth_kwargs):
             if not current_user:
                 return redirect(url_for('index'))
 
-            if authService.check_rights(current_user, level, or_is_current_user, kwargs['userid'], **auth_kwargs):
+            if authService.check_rights(current_user, level, or_is_current_user, kwargs.get('userid'), **auth_kwargs):
                 return func(*args, **kwargs)
 
             return redirect(url_for('index'))

@@ -9,7 +9,7 @@ from app.framework.decorators.inject import inject
 from app.services.user_service import UserService
 
 @app.get('/users')
-@auth_required(level="USER")
+@auth_required(level="USER", test="asdf")
 @inject
 def get_users(user_service: UserService):
     return jsonify([u.serialize() for u in user_service.find_all()])

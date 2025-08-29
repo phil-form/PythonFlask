@@ -12,8 +12,8 @@ class UserTokenDTO(AbstractDTO):
         self.lastname = user.lastname
 
     def serialize(self):
-        self.exp = (datetime.utcnow() + timedelta(hours=1)).timestamp()
-        self.iat = datetime.utcnow().timestamp()
+        self.exp = (datetime.now() + timedelta(hours=1)).timestamp()
+        self.iat = datetime.now().timestamp()
 
         return self.__dict__
 

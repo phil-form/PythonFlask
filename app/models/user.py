@@ -10,7 +10,7 @@ class User(db.Model, UserBase, BaseEntity):
     firstname = db.Column(db.String(255), nullable=True)
 
     basket_items = db.relationship('BasketItem', back_populates='user')
-    user_roles = db.relationship('UserRole', back_populates='user')
+    user_roles = db.relationship('UserRoles', back_populates='user')
 
     @property
     def roles(self):

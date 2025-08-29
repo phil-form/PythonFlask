@@ -6,6 +6,7 @@ import jwt
 from app.dtos.user_token_dto import UserTokenDTO
 from app.framework.forms.user_login_form import UserLoginForm
 from app.framework.auth_service import AuthService
+from app.framework.models.user_base import UserBase
 from app.models.user import User
 from app import app
 
@@ -41,3 +42,11 @@ class AuthServiceImpl(AuthService):
         self.__current_user = user
 
         return self.__current_user
+
+    def check_rights(self, user: UserBase, level, or_is_current_user, request_userid, **auth_kwags) -> bool:
+        # appeller les check right de base du parent
+        if not super().check_rights(user, level, or_is_current_user, request_userid, **auth_kwags):
+            return False
+
+        # custom rights
+        return True
