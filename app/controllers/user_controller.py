@@ -9,18 +9,20 @@ from app.framework.decorators.inject import inject
 from app.services.user_service import UserService
 
 @app.get('/users')
-@auth_required(level="USER", test="asdf")
+@auth_required() # demande d'être loggé
 @inject
 def get_users(user_service: UserService):
     return jsonify([u.serialize() for u in user_service.find_all()])
 
 @app.get('/users/<int:userid>')
+@auth_required() # demande d'être loggé
 @inject
 def get_user(userid: int, user_service: UserService):
     user = user_service.find_one(userid)
     return jsonify(user.serialize()) if user else ('', 404)
 
 @app.post('/users')
+@auth_required(level="ADMIN") # demande d'être loggé en tant qu'admin
 @inject
 def post_user(user_service: UserService):
     form = UserRegisterForm.from_json(request.json)
@@ -34,6 +36,7 @@ def post_user(user_service: UserService):
 
 # localhost:2344/users/25
 @app.put('/users/<int:userid>')
+@auth_required(level="ADMIN", or_is_current_user=True) # demande d'être loggé en tant qu'admin ou d'être l'utilisateur en cours
 @inject
 def put_user(userid: int, user_service: UserService):
     form = UserUpdateForm.from_json(request.json)
@@ -46,6 +49,7 @@ def put_user(userid: int, user_service: UserService):
     return jsonify(form.errors)
 
 @app.delete('/users/<int:userid>')
+@auth_required(level="ADMIN", or_is_current_user=True) # demande d'être loggé en tant qu'admin ou d'être l'utilisateur en cours
 @inject
 def delete_user(userid: int, user_service: UserService):
     dto = user_service.delete(userid)

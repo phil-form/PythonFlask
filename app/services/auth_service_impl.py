@@ -43,6 +43,7 @@ class AuthServiceImpl(AuthService):
 
         return self.__current_user
 
+    # Optionnellement modifier la fonction check_rights pour customiser les vérifications de droits sur l'application
     def check_rights(self, user: UserBase, level, or_is_current_user, request_userid, **auth_kwags) -> bool:
         # appeller les check right de base du parent
         if not super().check_rights(user, level, or_is_current_user, request_userid, **auth_kwags):
