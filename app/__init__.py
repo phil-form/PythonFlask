@@ -21,6 +21,7 @@ if os.path.exists(envlocal):
 app = Flask("app")
 app.debug = os.environ.get('DEBUG', False)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 wtforms_json.init()
 
@@ -32,3 +33,8 @@ migrate = Migrate(app, db)
 
 from app.models import *
 from app.controllers import *
+
+from app.config.injector_config import config_injector
+from app.framework.injector import Injector
+
+injector = Injector(app, config_func=config_injector)

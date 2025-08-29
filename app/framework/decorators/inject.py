@@ -3,7 +3,7 @@ from functools import wraps
 
 from app import app
 
-
+# @inject
 def inject(func):
     @wraps(func)
     def function_wrapper(*args, **kwargs):

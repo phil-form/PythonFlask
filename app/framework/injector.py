@@ -28,10 +28,10 @@ class ContainerConfig:
         return self.__config.get(dep_name)
 
 class Injector:
-    def __init__(self, app: Flask, config):
+    def __init__(self, app: Flask, config_func):
         print("INIT INJECTOR")
         self.__config = ContainerConfig()
-        config(self.__config)
+        config_func(self.__config)
         app.injector = self
         self.__singleton = {}
         self.__scoped = {}
