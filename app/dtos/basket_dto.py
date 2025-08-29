@@ -1,11 +1,11 @@
 from copy import deepcopy
 
-from app.dtos.abstract_dto import AbstractDTO
+from app.dtos.abstract_dto import BaseDTO
 from app.dtos.product_dto import ProductDTO
 from app.models.basket_item import BasketItem
 
 
-class BasketItemDTO(AbstractDTO):
+class BasketItemDTO(BaseDTO):
     def __init__(self, basket_item: BasketItem):
         self.id = basket_item.id
         self.product = ProductDTO(basket_item.product)

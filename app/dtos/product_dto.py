@@ -1,8 +1,8 @@
-from app.dtos.abstract_dto import AbstractDTO
+from app.dtos.abstract_dto import BaseDTO
 from app.models.product import Product
 
 
-class ProductDTO(AbstractDTO):
+class ProductDTO(BaseDTO):
     def __init__(self, product: Product):
         self.id = product.id
         self.name = product.name

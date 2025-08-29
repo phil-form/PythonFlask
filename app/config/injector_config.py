@@ -1,5 +1,6 @@
 from app.framework.auth_service import AuthService
 from app.framework.injector import ContainerConfig, DependencyConfig, Scope
+from app.services.role_service import RoleService
 from app.services.auth_service_impl import AuthServiceImpl
 from app.services.basket_item_service import BasketItemService
 from app.services.product_service import ProductService
@@ -15,3 +16,4 @@ def config_injector(config: ContainerConfig):
     config.bind(DependencyConfig(BasketItemService, BasketItemService, Scope.SINGLETON))
     config.bind(DependencyConfig(UserService, UserService, Scope.SINGLETON))
     config.bind(DependencyConfig(ProductService, ProductService, Scope.SINGLETON))
+    config.bind(DependencyConfig(RoleService, RoleService, Scope.SINGLETON))

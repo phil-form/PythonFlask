@@ -1,4 +1,6 @@
 import os
+
+import sys
 import wtforms_json
 from pathlib import Path
 from flask import Flask
@@ -38,3 +40,5 @@ from app.config.injector_config import config_injector
 from app.framework.injector import Injector
 
 injector = Injector(app, config_func=config_injector)
+
+from app.config.db_init import initialize_database

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractDTO(ABC):
+class BaseDTO(ABC):
     @abstractmethod
     def serialize(self):
         pass
