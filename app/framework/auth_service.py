@@ -24,3 +24,9 @@ class AuthService(ABC):
     @abstractmethod
     def set_current_user(self, user) -> UserBase:
         pass
+
+    def check_rights(self, user: UserBase, level, or_is_current_user, request_userid, **auth_kwags) -> bool:
+        return (
+                level in user.roles
+                or or_is_current_user and user.userid == request_userid
+            )

@@ -7,7 +7,7 @@ from jwt import PyJWTError
 import jwt
 from app import app
 
-def auth_required(level="USER", or_is_current_user=False):
+def auth_required(level="USER", or_is_current_user=False, **auth_kwargs):
     def auth_required_decorator(func):
         @wraps(func)
         @inject
@@ -37,10 +37,7 @@ def auth_required(level="USER", or_is_current_user=False):
             if not current_user:
                 return redirect(url_for('index'))
 
-            if level in current_user.roles:
-                return func(*args, **kwargs)
-
-            if or_is_current_user and current_user.userid == kwargs['userid']:
+            if authService.check_rights(current_user, level, or_is_current_user, kwargs['userid'], **auth_kwargs):
                 return func(*args, **kwargs)
 
             return redirect(url_for('index'))
