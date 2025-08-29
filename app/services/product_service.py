@@ -12,6 +12,9 @@ class ProductService(BaseService):
     def find_one(self, id):
         return ProductDTO(Product.query.filter_by(id=id))
 
+    def find_all_active_entities(self):
+        return Product.query.all()
+
     def insert(self, form: ProductForm):
         product = Product(
             name=form.name.data,

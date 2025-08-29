@@ -11,9 +11,11 @@ def config_injector(config: ContainerConfig):
     # Je dis que quand on me demande d'injecter le AuthService, j'injecte la AuthServiceImpl
     # Et je crée un nouveau AuthService à chaque requête.
     config.bind(DependencyConfig(AuthService, AuthServiceImpl, Scope.SCOPED))
+    # !!! Le BasketItemService nécissite l'AuthService, donc il faut qu'il soit aussi en SCOPED
+    # pour que chaque requête ait son propre AuthService.
+    config.bind(DependencyConfig(BasketItemService, BasketItemService, Scope.SCOPED))
     # Je dis que le BasketItemService, implémente le BasketItemService
     # Et n'existe qu'une seule fois au niveau de l'application.
-    config.bind(DependencyConfig(BasketItemService, BasketItemService, Scope.SINGLETON))
     config.bind(DependencyConfig(UserService, UserService, Scope.SINGLETON))
     config.bind(DependencyConfig(ProductService, ProductService, Scope.SINGLETON))
     config.bind(DependencyConfig(RoleService, RoleService, Scope.SINGLETON))
